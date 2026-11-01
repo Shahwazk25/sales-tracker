@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sales Tracker</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- ===================================================== -->
+    <!-- SIDEBAR -->
+    <!-- ===================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+    <img
+        src="sales-tracker-logo.png"
+        alt="Sales Tracker"
+    >
+</div>
+
+
+        <nav>
+
+            <a
+    href="#dashboard"
+    onclick="scrollToSection('dashboard')"
+>
+    <img
+        src="dashboard-logo.png"
+        alt="Dashboard"
+        class="nav-logo"
+    >
+    Dashboard
+</a>
+
+
+            <a
+    href="#reports"
+    onclick="scrollToSection('reports')"
+>
+    <img
+        src="reports-logo.png"
+        alt="Reports"
+        class="nav-logo"
+    >
+    Reports
+</a>
+
+
+            <a
+    href="#sales"
+    onclick="scrollToSection('sales')"
+>
+    <img
+        src="sales-logo.png"
+        alt="Sales"
+        class="nav-logo"
+    >
+    Sales
+</a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- ===================================================== -->
+    <!-- MAIN CONTENT -->
+    <!-- ===================================================== -->
+
+    <main
+        class="main"
+        id="dashboard"
+    >
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <header>
+
+            <div>
+
+                <h1>
+                    Sales Dashboard
+                </h1>
+
+                <p>
+                    Track your sales performance
+                </p>
+
+            </div>
+
+
+            <button
+                onclick="openSaleForm()"
+                class="add-btn"
+            >
+                + Add Sale
+            </button>
+
+        </header>
+
+
+
+<!-- ================================================= -->
+<!-- DASHBOARD CARDS -->
+<!-- ================================================= -->
+
+<section class="cards">
+
+    <div class="card">
+
+        <h3>
+            Today's Sales
+        </h3>
+
+        <h2 id="todaySales">
+            ₹0
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>
+            This Week
+        </h3>
+
+        <h2 id="weekSales">
+            ₹0
+        </h2>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>
+            This Month
+        </h3>
+
+        <h2 id="monthSales">
+            ₹0
+        </h2>
+
+    </div>
+
+
+    <div class="card" id="totalSalesCard">
+
+        <h3>
+            Total Sales
+        </h3>
+
+        <h2 id="totalSales">
+            ₹0
+        </h2>
+
+    </div>
+
+</section>
+
+
+<!-- ============================= -->
+<!-- AI Sales Insights -->
+<!-- ============================= -->
+
+<section class="ai-insights-section">
+
+    <div class="ai-insights-header">
+        <div>
+            <h2>🤖 AI Sales Insights</h2>
+            <p>
+                Get AI-powered business insights from your sales data.
+            </p>
+        </div>
+
+        <button id="generateAIInsights">
+            Generate AI Insights
+        </button>
+    </div>
+
+    <div id="aiInsightsResult" class="ai-insights-result">
+        <p class="ai-placeholder">
+            Click "Generate AI Insights" to analyze your sales data.
+        </p>
+    </div>
+
+</section>
+
+
+
+        <!-- ================================================= -->
+        <!-- REPORTS -->
+        <!-- ================================================= -->
+
+        <section
+            class="chart-box"
+            id="reports"
+        >
+
+
+            <!-- ================================================= -->
+            <!-- SALES OVERVIEW -->
+            <!-- ================================================= -->
+
+            <div class="section-title">
+
+                <h2>
+                    Sales Overview
+                </h2>
+
+
+                <select
+                    id="chartFilter"
+                    onchange="updateChart()"
+                >
+
+                    <option value="week">
+                        Last 7 Days
+                    </option>
+
+                    <option value="month">
+                        Last 30 Days
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                style="
+                    height: 350px;
+                    position: relative;
+                "
+            >
+
+                <canvas id="salesChart"></canvas>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- SALES BY CATEGORY -->
+            <!-- ================================================= -->
+
+            <div
+                class="category-report"
+                style="margin-top: 50px;"
+            >
+
+                <div class="section-title">
+
+                    <h2>
+                        Sales by Category
+                    </h2>
+
+                </div>
+
+
+                <div
+                    style="
+                        height: 350px;
+                        position: relative;
+                    "
+                >
+
+                    <canvas id="categoryChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- TOP-SELLING PRODUCTS -->
+            <!-- ================================================= -->
+
+            <div
+                class="top-products-report"
+                style="margin-top: 50px;"
+            >
+
+                <div class="section-title">
+
+                    <h2>
+                        Top-Selling Products
+                    </h2>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Rank
+                                </th>
+
+                                <th>
+                                    Product
+                                </th>
+
+                                <th>
+                                    Units Sold
+                                </th>
+
+                                <th>
+                                    Revenue
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="topProductsTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- SALES SUMMARY -->
+            <!-- ================================================= -->
+
+            <div
+                class="sales-summary"
+                style="margin-top: 50px;"
+            >
+
+                <div class="section-title">
+
+                    <h2>
+                        Sales Summary
+                    </h2>
+
+                </div>
+
+
+                <div class="cards">
+
+
+                    <div class="card">
+
+                        <h3>
+                            Total Revenue
+                        </h3>
+
+                        <h2 id="reportTotalRevenue">
+                            ₹0
+                        </h2>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <h3>
+                            Total Units Sold
+                        </h3>
+
+                        <h2 id="reportTotalUnits">
+                            0
+                        </h2>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <h3>
+                            Average Sale Value
+                        </h3>
+
+                        <h2 id="reportAverageSale">
+                            ₹0
+                        </h2>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <h3>
+                            Best-Selling Product
+                        </h3>
+
+                        <h2 id="reportBestProduct">
+                            -
+                        </h2>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- DATE-WISE SALES REPORT -->
+            <!-- ================================================= -->
+
+            <div
+                class="date-wise-report"
+                style="margin-top: 50px;"
+            >
+
+                <div class="section-title">
+
+                    <h2>
+                        Date-wise Sales Report
+                    </h2>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Transactions
+                                </th>
+
+                                <th>
+                                    Units Sold
+                                </th>
+
+                                <th>
+                                    Revenue
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="dateWiseSalesTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- ADD SALE FORM -->
+        <!-- ================================================= -->
+
+        <section
+            id="saleForm"
+            class="form-box hidden"
+        >
+
+
+            <h2>
+                Add New Sale
+            </h2>
+
+
+            <form
+                onsubmit="addSale(event)"
+            >
+
+
+                <div class="form-grid">
+
+
+                    <!-- PRODUCT -->
+
+                    <div>
+
+                        <label>
+                            Product Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="product"
+                            placeholder="Enter product"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- CATEGORY -->
+
+                    <div>
+
+                        <label>
+                            Category
+                        </label>
+
+
+                        <select
+                            id="category"
+                            required
+                        >
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                            <option value="Electronics">
+                                Electronics
+                            </option>
+
+                            <option value="Clothing">
+                                Clothing
+                            </option>
+
+                            <option value="Food">
+                                Food
+                            </option>
+
+                            <option value="Furniture">
+                                Furniture
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- QUANTITY -->
+
+                    <div>
+
+                        <label>
+                            Quantity
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="quantity"
+                            min="1"
+                            placeholder="Quantity"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- PRICE -->
+
+                    <div>
+
+                        <label>
+                            Unit Price
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="price"
+                            min="0"
+                            placeholder="₹ Price"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- DATE -->
+
+                    <div>
+
+                        <label>
+                            Sale Date
+                        </label>
+
+
+                        <input
+                            type="date"
+                            id="saleDate"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- FORM BUTTONS -->
+
+                <div class="form-buttons">
+
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+                        Save Sale
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="closeSaleForm()"
+                    >
+                        Cancel
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- SALES HISTORY -->
+        <!-- ================================================= -->
+
+        <section
+            class="sales-box"
+            id="sales"
+        >
+
+
+            <div class="section-title">
+
+    <h2>
+        Sales History
+    </h2>
+
+    <div style="display: flex; gap: 10px; align-items: center;">
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search product..."
+            oninput="filterSales()"
+        >
+
+        <button
+            type="button"
+            onclick="exportSalesCSV()"
+            class="export-btn"
+        >
+            ⬇ Export CSV
+        </button>
+
+    </div>
+
+</div>
+
+
+
+            <!-- ================================================= -->
+            <!-- FILTERS -->
+            <!-- ================================================= -->
+
+            <div
+                class="sales-filters"
+                style="
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
+                    margin: 15px 0;
+                "
+            >
+
+
+                <!-- CATEGORY -->
+
+                <select
+                    id="categoryFilter"
+                    onchange="filterSales()"
+                >
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    <option value="Electronics">
+                        Electronics
+                    </option>
+
+                    <option value="Clothing">
+                        Clothing
+                    </option>
+
+                    <option value="Food">
+                        Food
+                    </option>
+
+                    <option value="Furniture">
+                        Furniture
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+
+
+                <!-- FROM DATE -->
+
+                <input
+                    type="date"
+                    id="fromDate"
+                    onchange="filterSales()"
+                >
+
+
+
+                <!-- TO DATE -->
+
+                <input
+                    type="date"
+                    id="toDate"
+                    onchange="filterSales()"
+                >
+
+
+
+                <!-- CLEAR FILTERS -->
+
+                <button
+                    type="button"
+                    onclick="clearFilters()"
+                    class="cancel-btn"
+                >
+                    Clear Filters
+                </button>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- SALES TABLE -->
+            <!-- ================================================= -->
+
+            <div class="table-container">
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Product
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Quantity
+                            </th>
+
+                            <th>
+                                Unit Price
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody id="salesTable">
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ===================================================== -->
+    <!-- JAVASCRIPT -->
+    <!-- ===================================================== -->
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
